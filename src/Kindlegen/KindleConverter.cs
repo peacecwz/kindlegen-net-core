@@ -1,5 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Text;
+using Kindlegen.Models;
 
 namespace Kindlegen
 {
@@ -19,7 +24,7 @@ namespace Kindlegen
 
         public KindleConverter SetCompressionLevel(CompressionLevel compressionLevel)
         {
-            _command += $"-c{(int) compressionLevel} ";
+            _command += $"-c{(int)compressionLevel} ";
             return this;
         }
 
@@ -34,30 +39,49 @@ namespace Kindlegen
             _command += $"-western ";
             return this;
         }
-        
-        private string Execute(string arguments)
+
+        private string GetKindlePath()
+        {
+            string kindlePath = "/pkg";
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                kindlePath += "/win/kindlegen.exe";
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                kindlePath += "/linux/kindlegen.exe";
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                kindlePath += "/mac/kindlegen.exe";
+            }
+            else
+            {
+                throw new Exception("Unsupported OS");
+            }
+
+            return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + kindlePath;
+        }
+
+        private KindleConvertResult Execute(string arguments)
         {
             using (var kindlegenProcess = new Process())
             {
                 kindlegenProcess.StartInfo.UseShellExecute = false;
                 kindlegenProcess.StartInfo.RedirectStandardOutput = true;
-                kindlegenProcess.StartInfo.FileName = Path.Combine("", "kindlegen.exe");
-                kindlegenProcess.StartInfo.Arguments = arguments;
+                kindlegenProcess.StartInfo.FileName = GetKindlePath();
+                kindlegenProcess.StartInfo.Arguments = Encoding.Default.GetString(Encoding.UTF8.GetBytes(arguments));
                 kindlegenProcess.Start();
-            
+
                 var output = kindlegenProcess.StandardOutput.ReadToEnd();
                 kindlegenProcess.WaitForExit();
-                return output;
+                return KindleOutputParser.ParseOutput(output);
             }
         }
 
         public KindleConvertResult Convert()
         {
-            var result = new KindleConvertResult();
-            var commandOutput = Execute(_command);
-            result.IsSuccess = true;
-            result.Output = commandOutput;
-            return result;
+            return Execute(_command);
         }
     }
 }
