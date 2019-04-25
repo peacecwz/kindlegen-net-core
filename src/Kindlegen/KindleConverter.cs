@@ -49,11 +49,11 @@ namespace Kindlegen
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                kindlePath += "/linux/kindlegen.exe";
+                kindlePath += "/linux/kindlegen";
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                kindlePath += "/mac/kindlegen.exe";
+                kindlePath += "/mac/kindlegen";
             }
             else
             {
