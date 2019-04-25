@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Kindlegen</id>
+    <version>1.0.0</version>
+    <title>Kindlegen</title>
+    <authors>Baris Ceviz</authors>
+    <owners>peacecwz</owners>
+    <licenseUrl>https://github.com/peacecwz/kindlegen-net-core/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/peacecwz/kindlegen-net-core</projectUrl>
+    <description>Cross Platform Kindlegen .NET Core Wrapper</description>
+    <releaseNotes>First Version</releaseNotes>
+    <copyright>Copyright @2019 Baris Ceviz</copyright>
+    <tags>kindle,kindlegen,kindlegen-wrapper</tags>
+  </metadata>
+  
+  <files>
+    <file src="bin\Release\netstandard2.0\**" exclude="**\*.pdb;**\*.json" target="" />
+  </files>
+</package>
