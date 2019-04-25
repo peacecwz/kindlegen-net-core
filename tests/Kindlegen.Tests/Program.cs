@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Kindlegen.Models;
 
 namespace Kindlegen.Tests
 {
@@ -10,10 +12,20 @@ namespace Kindlegen.Tests
             string path = Console.ReadLine();
             var result = KindleConverter.Create(path)
                 .SetCompressionLevel(CompressionLevel.NoCompression)
-                .SetOutput("test")
+                .SetOutput("test.mobi")
                 .Convert();
+        
+            if (!result.IsSuccess)
+            {
+                string message = result.Details.FirstOrDefault(x => x.ConvertLogType == ConvertLogType.Error)?.Message;
+                Console.WriteLine($"Has exception: {message}");
+            }
+            else
+            {
+                Console.WriteLine("Complete successfully");
+            }
 
-            Console.WriteLine(result.Output);
+            Console.ReadKey();
         }
     }
 }
