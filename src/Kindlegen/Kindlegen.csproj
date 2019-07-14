@@ -2,9 +2,14 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
+	    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	    <NuspecFile>Kindlegen.$(Configuration).nuspec</NuspecFile>
     </PropertyGroup>
 
     <ItemGroup>
+      <None Update="Kindlegen.targets">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
       <None Update="pkg\linux\kindlegen">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
